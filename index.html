@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-Resume Builder Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Montserrat:wght@400;500;600;700&family=Nunito:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Lora:wght@400;500;600&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Sans:wght@400;500;600&family=Work+Sans:wght@400;500;600&family=Merriweather:wght@400;700&family=PT+Serif:wght@400;700&family=Raleway:wght@400;500;600;700&family=Ubuntu:wght@400;500;700&family=Rubik:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fas fa-file-signature text-primary"></i>
+                <h2>V-Resume Pro</h2>
+                <button id="theme-toggle-btn" class="theme-icon-btn" title="Toggle Dark/Light Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-item active" data-target="editor"><i class="fas fa-edit"></i> Builder</button>
+                <button class="nav-item" data-target="templates"><i class="fas fa-layer-group"></i> Templates</button>
+                <button class="nav-item" data-target="design"><i class="fas fa-palette"></i> Design</button>
+                <button class="nav-item" data-target="ats-score"><i class="fas fa-check-double"></i> ATS Engine</button>
+                <button class="nav-item" data-target="data-sync"><i class="fas fa-database"></i> Data Sync</button>
+            </nav>
+            <div class="sidebar-footer">
+                <p>Made by<br><strong>Vamsi Raju Oleti</strong></p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="mobile-header">
+                <i class="fas fa-bars" id="mobile-toggle"></i>
+                <h2>V-Resume Pro</h2>
+                <button class="btn btn-primary" id="mobile-download"><i class="fas fa-download"></i></button>
+            </header>
+
+            <section class="panel active" id="panel-editor">
+                <div class="panel-header">
+                    <h3>Resume Details</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="completion-bar"></div>
+                    </div>
+                    <small>Completion: <span id="completion-text">0%</span></small>
+                </div>
+
+                <div class="form-container">
+                    <div class="card" style="border-color: var(--primary);">
+                        <h4 class="card-title"><i class="fas fa-sliders-h"></i> Experience Level (ATS Strategy)</h4>
+                        <p class="text-muted" style="margin-bottom: 15px; font-size: 0.85rem;">This setting automatically optimizes your resume layout for Applicant Tracking Systems.</p>
+                        <div class="grid-2">
+                            <label class="radio-card">
+                                <input type="radio" name="expLevel" value="fresher" id="exp-fresher">
+                                <div class="card-content">
+                                    <i class="fas fa-graduation-cap mb-2" style="font-size: 1.5rem;"></i><br>
+                                    Fresher / Student<br>
+                                    <span style="font-size: 0.75rem; font-weight: normal;">Skills & Projects First</span>
+                                </div>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="expLevel" value="experienced" id="exp-experienced">
+                                <div class="card-content">
+                                    <i class="fas fa-briefcase mb-2" style="font-size: 1.5rem;"></i><br>
+                                    Experienced<br>
+                                    <span style="font-size: 0.75rem; font-weight: normal;">Work Experience First</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-user"></i> Personal Information</h4>
+                        <div class="grid-2">
+                            <input type="text" id="fullName" placeholder="Full Name" class="input-field">
+                            <input type="text" id="jobTitle" placeholder="Professional Title (e.g., Software Engineer)" class="input-field">
+                            <input type="email" id="email" placeholder="Email Address" class="input-field">
+                            <input type="tel" id="phone" placeholder="Phone Number" class="input-field">
+                            <input type="text" id="linkedin" placeholder="LinkedIn URL" class="input-field">
+                            <input type="text" id="github" placeholder="GitHub URL" class="input-field">
+                            <input type="text" id="portfolio" placeholder="Portfolio URL" class="input-field">
+                            <input type="text" id="address" placeholder="Location (City, Country)" class="input-field">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-align-left"></i> Professional Summary</h4>
+                        <textarea id="summary" placeholder="Write a brief summary of your skills and career goals..." class="input-field" rows="4"></textarea>
+                    </div>
+
+                    <div id="dynamic-sections-container">
+                        
+                        <div class="card dynamic-section" data-type="experience" id="card-experience">
+                            <h4 class="card-title"><i class="fas fa-briefcase"></i> Work Experience</h4>
+                            <div class="items-list" id="experience-list"></div>
+                            <button class="btn btn-outline btn-block add-item" data-type="experience">+ Add Experience</button>
+                        </div>
+
+                        <div class="card dynamic-section" data-type="skills">
+                            <h4 class="card-title"><i class="fas fa-code"></i> Skills</h4>
+                            <div class="grid-2">
+                                <div>
+                                    <label style="font-size:0.85rem; color:var(--text-muted); margin-bottom:5px; display:block;">Technical Skills (Comma separated)</label>
+                                    <textarea id="techSkills" class="input-field" rows="3" placeholder="React, Node.js, Python, AWS..."></textarea>
+                                </div>
+                                <div>
+                                    <label style="font-size:0.85rem; color:var(--text-muted); margin-bottom:5px; display:block;">Soft Skills & Tools (Comma separated)</label>
+                                    <textarea id="softSkills" class="input-field" rows="3" placeholder="Agile, Jira, Leadership, Communication..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card dynamic-section" data-type="projects">
+                            <h4 class="card-title"><i class="fas fa-project-diagram"></i> Projects</h4>
+                            <div class="items-list" id="projects-list"></div>
+                            <button class="btn btn-outline btn-block add-item" data-type="projects">+ Add Project</button>
+                        </div>
+
+                        <div class="card dynamic-section" data-type="education">
+                            <h4 class="card-title"><i class="fas fa-graduation-cap"></i> Education</h4>
+                            <div class="items-list" id="education-list"></div>
+                            <button class="btn btn-outline btn-block add-item" data-type="education">+ Add Education</button>
+                        </div>
+
+                        <div class="card dynamic-section" data-type="internships">
+                            <h4 class="card-title"><i class="fas fa-laptop-code"></i> Internships / Training</h4>
+                            <div class="items-list" id="internships-list"></div>
+                            <button class="btn btn-outline btn-block add-item" data-type="internships">+ Add Internship</button>
+                        </div>
+
+                        <div class="card dynamic-section" data-type="certifications">
+                            <h4 class="card-title"><i class="fas fa-certificate"></i> Certifications</h4>
+                            <div class="items-list" id="certifications-list"></div>
+                            <button class="btn btn-outline btn-block add-item" data-type="certifications">+ Add Certification</button>
+                        </div>
+
+                        <div class="card dynamic-section" data-type="achievements">
+                            <h4 class="card-title"><i class="fas fa-trophy"></i> Achievements & Awards</h4>
+                            <div class="items-list" id="achievements-list"></div>
+                            <button class="btn btn-outline btn-block add-item" data-type="achievements">+ Add Achievement</button>
+                        </div>
+
+                        <div class="card dynamic-section">
+                            <h4 class="card-title"><i class="fas fa-plus-circle"></i> Additional Information</h4>
+                            <div class="grid-2">
+                                <textarea id="languages" class="input-field" placeholder="Languages (e.g., English, Telugu)"></textarea>
+                                <textarea id="interests" class="input-field" placeholder="Interests/Hobbies (e.g., Chess, Reading)"></textarea>
+                                <textarea id="volunteer" class="input-field" placeholder="Volunteer Work / Clubs"></textarea>
+                                <textarea id="publications" class="input-field" placeholder="Publications (Optional)"></textarea>
+                                <textarea id="references" class="input-field" style="grid-column: span 2;" rows="2" placeholder="References (Optional, e.g., 'Available upon request')"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h4 class="card-title"><i class="fas fa-signature"></i> Declaration</h4>
+                            <label class="checkbox-container"> Include Declaration Section
+                                <input type="checkbox" id="includeDeclaration">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div id="declaration-fields" style="display: none; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border-color);">
+                                <div class="grid-2">
+                                    <input type="text" id="declPlace" placeholder="Place (e.g., City)" class="input-field">
+                                    <input type="date" id="declDate" class="input-field">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel" id="panel-templates">
+                <div class="panel-header">
+                    <h3>Resume Templates</h3>
+                    <p class="text-muted">Tailored to your career stage. 100% ATS-friendly.</p>
+                </div>
+                <div class="template-grid" id="template-selector">
+                    <button class="template-btn active" data-tpl="tpl-modern">Modern Professional (Default)</button>
+                    <button class="template-btn" data-tpl="tpl-fresher">Fresher Resume</button>
+                    <button class="template-btn" data-tpl="tpl-student">University Student</button>
+                    <button class="template-btn" data-tpl="tpl-intern">Internship Resume</button>
+                    <button class="template-btn" data-tpl="tpl-experienced">Experienced Professional</button>
+                    <button class="template-btn" data-tpl="tpl-tech">Tech & Engineering</button>
+                    <button class="template-btn" data-tpl="tpl-executive">Corporate Executive</button>
+                    <button class="template-btn" data-tpl="tpl-minimal">Minimalist Clean</button>
+                    <button class="template-btn" data-tpl="tpl-creative">Creative & Design</button>
+                    <button class="template-btn" data-tpl="tpl-elegant">Elegant Premium</button>
+                </div>
+            </section>
+
+            <section class="panel" id="panel-design">
+                <div class="panel-header">
+                    <h3>Design & Typography</h3>
+                    <p class="text-muted">Customize the look and feel of your resume.</p>
+                </div>
+                <div class="form-container">
+                    
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-fill-drip"></i> Accent Color</h4>
+                        <p class="text-muted mb-2" style="font-size: 0.85rem;">This color will update your UI and your resume template instantly.</p>
+                        <div class="color-palette" id="color-selector">
+                            <div class="color-swatch active" data-color="#0284C7" style="background-color: #0284C7;" title="Ocean Blue"></div>
+                            <div class="color-swatch" data-color="#0D9488" style="background-color: #0D9488;" title="Teal Green"></div>
+                            <div class="color-swatch" data-color="#10B981" style="background-color: #10B981;" title="Emerald"></div>
+                            <div class="color-swatch" data-color="#F97316" style="background-color: #F97316;" title="Sunset Orange"></div>
+                            <div class="color-swatch" data-color="#E11D48" style="background-color: #E11D48;" title="Crimson Red"></div>
+                            <div class="color-swatch" data-color="#4F46E5" style="background-color: #4F46E5;" title="Deep Indigo"></div>
+                            <div class="color-swatch" data-color="#7C3AED" style="background-color: #7C3AED;" title="Royal Purple"></div>
+                            <div class="color-swatch" data-color="#DB2777" style="background-color: #DB2777;" title="Vibrant Pink"></div>
+                            <div class="color-swatch" data-color="#475569" style="background-color: #475569;" title="Slate Grey"></div>
+                            <div class="color-swatch" data-color="#D97706" style="background-color: #D97706;" title="Golden Amber"></div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-font"></i> Premium Fonts</h4>
+                        <div class="template-grid font-grid" id="font-selector">
+                            <button class="template-btn active" data-font="Inter" style="font-family: 'Inter', sans-serif;">Inter</button>
+                            <button class="template-btn" data-font="Plus Jakarta Sans" style="font-family: 'Plus Jakarta Sans', sans-serif;">Jakarta Sans</button>
+                            <button class="template-btn" data-font="Outfit" style="font-family: 'Outfit', sans-serif;">Outfit</button>
+                            <button class="template-btn" data-font="Manrope" style="font-family: 'Manrope', sans-serif;">Manrope</button>
+                            <button class="template-btn" data-font="Poppins" style="font-family: 'Poppins', sans-serif;">Poppins</button>
+                            <button class="template-btn" data-font="Roboto" style="font-family: 'Roboto', sans-serif;">Roboto</button>
+                            <button class="template-btn" data-font="Open Sans" style="font-family: 'Open Sans', sans-serif;">Open Sans</button>
+                            <button class="template-btn" data-font="Lato" style="font-family: 'Lato', sans-serif;">Lato</button>
+                            <button class="template-btn" data-font="Montserrat" style="font-family: 'Montserrat', sans-serif;">Montserrat</button>
+                            <button class="template-btn" data-font="Nunito" style="font-family: 'Nunito', sans-serif;">Nunito</button>
+                            <button class="template-btn" data-font="Fira Sans" style="font-family: 'Fira Sans', sans-serif;">Fira Sans</button>
+                            <button class="template-btn" data-font="Work Sans" style="font-family: 'Work Sans', sans-serif;">Work Sans</button>
+                            <button class="template-btn" data-font="Raleway" style="font-family: 'Raleway', sans-serif;">Raleway</button>
+                            <button class="template-btn" data-font="Ubuntu" style="font-family: 'Ubuntu', sans-serif;">Ubuntu</button>
+                            <button class="template-btn" data-font="Rubik" style="font-family: 'Rubik', sans-serif;">Rubik</button>
+                            <button class="template-btn" data-font="Source Sans 3" style="font-family: 'Source Sans 3', sans-serif;">Source Sans</button>
+                            <button class="template-btn" data-font="Playfair Display" style="font-family: 'Playfair Display', serif;">Playfair (Serif)</button>
+                            <button class="template-btn" data-font="Lora" style="font-family: 'Lora', serif;">Lora (Serif)</button>
+                            <button class="template-btn" data-font="Merriweather" style="font-family: 'Merriweather', serif;">Merriweather</button>
+                            <button class="template-btn" data-font="PT Serif" style="font-family: 'PT Serif', serif;">PT Serif</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel" id="panel-ats-score">
+                <div class="panel-header">
+                    <h3>ATS Optimization</h3>
+                </div>
+                <div class="card text-center ats-card">
+                    <div class="ats-circle" id="ats-circle">
+                        <h1 id="ats-score">0</h1>
+                        <span>/ 100</span>
+                    </div>
+                    <h3 id="ats-status" class="mt-2">Needs Work</h3>
+                </div>
+                <div class="card mt-2">
+                    <h4>Suggestions</h4>
+                    <ul id="ats-suggestions" class="suggestion-list">
+                    </ul>
+                </div>
+            </section>
+
+            <section class="panel" id="panel-data-sync">
+                <div class="panel-header">
+                    <h3>Data Management</h3>
+                </div>
+                <div class="card text-center">
+                    <i class="fas fa-file-export fa-3x text-primary mb-2"></i>
+                    <p>Backup your data securely as a JSON file.</p>
+                    <button class="btn btn-primary mt-2" id="export-btn">Export Data</button>
+                </div>
+                <div class="card text-center mt-2">
+                    <i class="fas fa-file-import fa-3x text-primary mb-2"></i>
+                    <p>Restore your data from a JSON file.</p>
+                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                    <button class="btn btn-outline mt-2" onclick="document.getElementById('import-file').click()">Import Data</button>
+                </div>
+                <div class="card text-center mt-2" style="border-color: var(--danger);">
+                    <p class="text-muted mb-2">Start fresh with empty fields.</p>
+                    <button class="btn btn-outline" style="color: var(--danger);" id="clear-data-btn">Clear All Data</button>
+                </div>
+            </section>
+        </main>
+
+        <aside class="preview-area">
+            <div class="preview-toolbar">
+                <div class="zoom-controls">
+                    <button id="zoom-out"><i class="fas fa-minus"></i></button>
+                    <span id="zoom-level">100%</span>
+                    <button id="zoom-in"><i class="fas fa-plus"></i></button>
+                </div>
+                <button class="btn btn-primary" id="download-pdf"><i class="fas fa-file-pdf"></i> Download PDF</button>
+            </div>
+            <div class="paper-container">
+                <div id="resume-document" class="a4-paper tpl-modern">
+                    </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
